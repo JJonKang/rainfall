@@ -1,6 +1,6 @@
 import pygame
-import buttons
-import controls
+import dev.buttons as buttons
+import dev.controls as controls
 from sys import exit #true exit program
 
 pygame.init()
