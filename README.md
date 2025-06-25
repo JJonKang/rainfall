@@ -1,4 +1,4 @@
 # rainfall
-WIP! If curious, please do these two lines in the local terminal
-pip install -r requirements.txt
+WIP! If curious, please do these two lines in the local terminal <br>
+pip install -r requirements.txt <br>
 python main.py
