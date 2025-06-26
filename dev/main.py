@@ -19,6 +19,22 @@ text_rect = text_surf.get_rect(center = (400, 50))
 player = controls.Player()
 player_rect = player.rect
 
+#horiz walls
+wall_surf_hor = pygame.Surface((800, 20)).convert()
+wall_surf_hor.fill("#371138")
+top_wall_rect = wall_surf_hor.get_rect(center = (400, 10))
+bot_wall_rect = wall_surf_hor.get_rect(center = (400, 490))
+
+#vert walls
+wall_surf_vert = pygame.Surface((20, 500)).convert()
+wall_surf_vert.fill("#371138")
+left_wall_rect = wall_surf_vert.get_rect(center = (10, 250))
+right_wall_rect = wall_surf_vert.get_rect(center = (790, 250))
+
+#use this for collision checks for walls
+wall_rects = [top_wall_rect, bot_wall_rect, left_wall_rect, right_wall_rect]
+
+
 #================================================================================
 #
 #
@@ -31,6 +47,11 @@ while True:
             pygame.quit()
             exit()
     screen.fill('black')
+    screen.blit(wall_surf_hor, top_wall_rect)
+    screen.blit(wall_surf_hor, bot_wall_rect)
+    screen.blit(wall_surf_vert, left_wall_rect)
+    screen.blit(wall_surf_vert, right_wall_rect)
+
     play_rect, help_rect = buttons.intro(screen)
 
     #text
@@ -49,6 +70,15 @@ while True:
         text_surf = basic_font.render('help 1', False, "#1b005b")
         text_rect = text_surf.get_rect(center = (400, 50))
 
+    if (player_rect.colliderect(bot_wall_rect) or
+        player_rect.colliderect(top_wall_rect) or
+        player_rect.colliderect(left_wall_rect) or
+        player_rect.colliderect(right_wall_rect)):
+        player.set_x(0)
+        player.set_y(0)
+        player.set_deny(True)
+        text_surf = basic_font.render('walled', False, "#741c1c")
+        text_rect = text_surf.get_rect(center = (400, 50))
 
     #don't touch
     pygame.display.update()
