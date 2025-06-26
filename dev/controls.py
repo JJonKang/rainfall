@@ -2,7 +2,7 @@
 #currently only contains the player
 import pygame
 class Player:
-    #for now the multipler for speed is simply 1
+    #for now the multipler for speed is simply 3
     def __init__(self, x = 300, y = 250,spd_mult = 3):
         self.x = x
         self.y = y

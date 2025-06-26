@@ -16,6 +16,7 @@ clock = pygame.time.Clock()
 
 #text
 basic_font = pygame.font.Font('font/Tiny5-Regular.ttf', 50)
+smaller_basic_font = pygame.font.Font('font/Tiny5-Regular.ttf', 25)
 text_surf = basic_font.render('default 0', False, 'white')
 text_rect = text_surf.get_rect(center = (400, 50))
 
@@ -87,10 +88,18 @@ while True:
     screen.blit(wall_surf_vert, right_wall_rect)
 
     #buttons variables
-    play_rect, help_rect = buttons.intro(screen)
+    play_button_rect, help_button_rect = buttons.intro(screen)
 
     #text
     screen.blit(text_surf, text_rect)
+    help_list = ['F or J to BOOST', 'E or K to FOCUS', 'Space to INTERACT']
+    y_offset = 0
+    for line in help_list:
+        help_surf = smaller_basic_font.render(line, False, 'white')
+        help_rect = help_surf.get_rect(center = (400, 375 + y_offset))
+        y_offset += 20
+        screen.blit(help_surf, help_rect)
+    
 
     #controlling the player
     keys = pygame.key.get_pressed()
@@ -98,10 +107,10 @@ while True:
     player.object(screen)
 
     #collision checks
-    if player_rect.colliderect(play_rect) and keys[pygame.K_SPACE]:
+    if player_rect.colliderect(play_button_rect) and keys[pygame.K_SPACE]:
         text_surf = basic_font.render('click 1', False, "#270061")
         text_rect = text_surf.get_rect(center = (400, 50))
-    elif player_rect.colliderect(help_rect) and keys[pygame.K_SPACE]:
+    elif player_rect.colliderect(help_button_rect) and keys[pygame.K_SPACE]:
         text_surf = basic_font.render('help 1', False, "#1b005b")
         text_rect = text_surf.get_rect(center = (400, 50))
     if player.get_collide() == True:
