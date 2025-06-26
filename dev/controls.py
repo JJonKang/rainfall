@@ -1,23 +1,27 @@
 import pygame
 class Player:
     #for now the multipler for speed is simply 1
-    def __init__(self, x = 0, y = 0,spd_mult = 2.5):
+    def __init__(self, x = 25, y = 25,spd_mult = 2.5):
         self.x = x
         self.y = y
         self.spd_mult = spd_mult
 
+        self.image = pygame.Surface((25,25))
+        self.image.fill('white')
+        self.rect = self.image.get_rect(midbottom=(self.y, self.x))
+
     def movement(self, key):
         if key[pygame.K_d] or key[pygame.K_RIGHT]:
-            self.x += self.spd_mult
+            self.rect.x += self.spd_mult
         if key[pygame.K_a] or key[pygame.K_LEFT]:
-            self.x -= self.spd_mult
+            self.rect.x -= self.spd_mult
         if key[pygame.K_w] or key[pygame.K_UP]:
-            self.y -= self.spd_mult
+            self.rect.y -= self.spd_mult
         if key[pygame.K_s] or key[pygame.K_DOWN]:
-            self.y += self.spd_mult
+            self.rect.y += self.spd_mult
     
     def object(self, obj):
-        pygame.draw.rect(obj, (25, 25, 2), (self.x, self.y, 25, 25))
+        obj.blit(self.image, self.rect)
 
     def get_pos(self):
         print(self.x, self.y, self.spd_mult)

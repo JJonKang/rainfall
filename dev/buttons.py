@@ -11,3 +11,5 @@ def intro(screen):
     help_surf.fill((200, 0, 200))
     help_rect = help_surf.get_rect(center = (400, 400))
     screen.blit(help_surf, help_rect)
+
+    return play_rect, help_rect
