@@ -38,6 +38,33 @@ right_wall_rect = wall_surf_vert.get_rect(center = (790, 250))
 #use this for collision checks for walls
 wall_rects = [top_wall_rect, bot_wall_rect, left_wall_rect, right_wall_rect]
 
+#================================================================================
+#
+#
+#                                DEFUNCT
+#                            Wall Collision
+#
+#
+def wall_collision():
+    for wall in wall_rects:
+        if player_rect.colliderect(wall):
+            #top wall and bottom wall collision checks
+            if wall == top_wall_rect or wall == bot_wall_rect:
+                if player_rect.centery < wall.centery:
+                    player.set_y(wall.top - player_rect.height)
+                else:
+                    player.set_y(wall.bottom)
+                text_surf = basic_font.render('walled', False, "#741c1c")
+                text_rect = text_surf.get_rect(center = (400, 50))
+
+            #left wall and right wall collision checks
+            if wall == left_wall_rect or wall == right_wall_rect:
+                if player_rect.centerx < wall.centerx:
+                    player.set_x(wall.left - player_rect.width)
+                else:
+                    player.set_x(wall.right)
+                text_surf = basic_font.render('walled', False, "#741c1c")
+                text_rect = text_surf.get_rect(center = (400, 50))
 
 #================================================================================
 #
@@ -67,7 +94,7 @@ while True:
 
     #controlling the player
     keys = pygame.key.get_pressed()
-    player.movement(keys)
+    player.movement(keys, wall_rects) #note the wall_rects for future reference, not sure if it'll need to be removed later
     player.object(screen)
 
     #collision checks
@@ -77,16 +104,11 @@ while True:
     elif player_rect.colliderect(help_rect) and keys[pygame.K_SPACE]:
         text_surf = basic_font.render('help 1', False, "#1b005b")
         text_rect = text_surf.get_rect(center = (400, 50))
-
-    if (player_rect.colliderect(bot_wall_rect) or
-        player_rect.colliderect(top_wall_rect) or
-        player_rect.colliderect(left_wall_rect) or
-        player_rect.colliderect(right_wall_rect)):
-        player.set_x(0)
-        player.set_y(0)
-        player.set_deny(True)
+    
+    if player.get_collide() == True:
         text_surf = basic_font.render('walled', False, "#741c1c")
         text_rect = text_surf.get_rect(center = (400, 50))
+        player.set_collide(False)
 
     #don't touch
     pygame.display.update()

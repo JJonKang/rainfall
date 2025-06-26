@@ -8,30 +8,46 @@ class Player:
         self.y = y
         self.spd_mult = spd_mult
 
-        self.deny = False #collision, denies movement
-
         self.image = pygame.Surface((20,20))
         self.image.fill('white')
         self.rect = self.image.get_rect(center = (self.y, self.x))
+        self.collide = False
 
     #moves the player depending on wasd or arrow keys
-    def movement(self, key):
-        if self.deny == True:
-            return
-        
+    def movement(self, key, collision):
+
+        #keeping the former position
+        old_rect = self.rect.copy()
+
+        #left/right movement
         if key[pygame.K_d] or key[pygame.K_RIGHT]:
             self.rect.x += self.spd_mult
         if key[pygame.K_a] or key[pygame.K_LEFT]:
             self.rect.x -= self.spd_mult
+
+        #left/right collision check
+        for collide in collision:
+            if collide.colliderect(self.rect):
+                self.rect.x = old_rect.x
+                self.collide = True
+                break
+
+        #up/down movement
         if key[pygame.K_w] or key[pygame.K_UP]:
             self.rect.y -= self.spd_mult
         if key[pygame.K_s] or key[pygame.K_DOWN]:
             self.rect.y += self.spd_mult
+
+        #up/down collision check
+        for collide in collision:
+            if collide.colliderect(self.rect):
+                self.rect.y = old_rect.y
+                self.collide = True
+                break
     
     #draws the player's position
     def object(self, obj):
         obj.blit(self.image, self.rect)
-
 
     #getters and setters
     def get_pos(self):
@@ -45,3 +61,9 @@ class Player:
 
     def set_deny(self, deny):
         self.deny = deny
+
+    def set_collide(self, collide):
+        self.collide = collide
+
+    def get_collide(self):
+        return self.collide
