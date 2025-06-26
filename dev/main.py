@@ -104,7 +104,6 @@ while True:
     elif player_rect.colliderect(help_rect) and keys[pygame.K_SPACE]:
         text_surf = basic_font.render('help 1', False, "#1b005b")
         text_rect = text_surf.get_rect(center = (400, 50))
-    
     if player.get_collide() == True:
         text_surf = basic_font.render('walled', False, "#741c1c")
         text_rect = text_surf.get_rect(center = (400, 50))

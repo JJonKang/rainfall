@@ -7,9 +7,13 @@ class Player:
         self.x = x
         self.y = y
         self.spd_mult = spd_mult
+        self.spd_mult_default = spd_mult
+        self.spd_lock = False
 
-        self.image = pygame.Surface((20,20))
-        self.image.fill('white')
+        self.dash_cd = 0
+
+        self.image = pygame.Surface((18,18))
+        self.clr_default = 'white'
         self.rect = self.image.get_rect(center = (self.y, self.x))
         self.collide = False
 
@@ -18,6 +22,26 @@ class Player:
 
         #keeping the former position
         old_rect = self.rect.copy()
+
+        #"dash"
+        if (key[pygame.K_f] or key[pygame.K_j]) and self.spd_lock == False and self.dash_cd == 0:
+            self.spd_mult = self.spd_mult_default * 2
+            self.dash_cd = 60
+            self.image.fill('blue')
+            self.spd_lock = True
+        else:
+            if self.dash_cd > 0:
+                self.image.fill('blue')
+                self.dash_cd -= 1
+            else:
+                self.spd_mult = self.spd_mult_default
+                self.image.fill(self.clr_default)
+                self.spd_lock = False
+        
+        #"focus"
+        if (key[pygame.K_LSHIFT] or key[pygame.K_RSHIFT]) and self.spd_lock == False:
+            self.spd_mult = self.spd_mult_default / 2
+            self.image.fill('orange')
 
         #left/right movement
         if key[pygame.K_d] or key[pygame.K_RIGHT]:
