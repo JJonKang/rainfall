@@ -70,6 +70,38 @@ def wall_collision():
 #================================================================================
 #
 #
+#                           SETTING UP/FOUNDATIONS
+#                            
+#
+def nothing():
+    pass
+
+#================================================================================
+#
+#
+#                                  TEXT
+#                            
+#
+
+#mainly for instructions on how to play
+def instructions():
+    screen.blit(text_surf, text_rect)
+    help_list = ['WASD or ARROWS to MOVE', 'F or J to BOOST', 'E or K to FOCUS', 'Space to INTERACT']
+    y_offset = 0
+    for line in help_list:
+        help_surf = smaller_basic_font.render(line, False, 'white')
+        help_rect = help_surf.get_rect(center = (400, 362 + y_offset))
+        y_offset += 25
+        screen.blit(help_surf, help_rect)
+#cooldown visualization text
+def cd_visualization():
+    cd_text_surf = smaller_basic_font.render(str((player.get_cooldown() + 59) // 60), False, 'white')
+    cd_text_rect = cd_text_surf.get_rect(center = (770, 34))
+    screen.blit(cd_text_surf, cd_text_rect)
+
+#================================================================================
+#
+#
 #                                MAIN LOOP
 #
 #
@@ -88,28 +120,18 @@ while True:
     screen.blit(wall_surf_vert, right_wall_rect)
 
     #buttons variables
-    play_button_rect, help_button_rect = buttons.intro(screen)
+    play_button_rect, help_button_rect = buttons.intro(screen)    
 
-    #text
-    screen.blit(text_surf, text_rect)
-    help_list = ['WASD or ARROWS to MOVE', 'F or J to BOOST', 'E or K to FOCUS', 'Space to INTERACT']
-    y_offset = 0
-    for line in help_list:
-        help_surf = smaller_basic_font.render(line, False, 'white')
-        help_rect = help_surf.get_rect(center = (400, 362 + y_offset))
-        y_offset += 25
-        screen.blit(help_surf, help_rect)
-    
+    #instructions text
+    instructions()
 
     #controlling the player
     keys = pygame.key.get_pressed()
     player.movement(keys, wall_rects) #note the wall_rects for future reference, not sure if it'll need to be removed later
     player.object(screen)
 
-    #more text
-    cd_text_surf = smaller_basic_font.render(str((player.get_cooldown() + 59) // 60), False, 'white')
-    cd_text_rect = cd_text_surf.get_rect(center = (770, 34))
-    screen.blit(cd_text_surf, cd_text_rect)
+    #boost cooldown visual
+    cd_visualization()
 
     #collision checks
     if player_rect.colliderect(play_button_rect) and keys[pygame.K_SPACE]:
