@@ -1,3 +1,5 @@
+#controls file
+#currently only contains the player
 import pygame
 class Player:
     #for now the multipler for speed is simply 1
@@ -12,6 +14,7 @@ class Player:
         self.image.fill('white')
         self.rect = self.image.get_rect(center = (self.y, self.x))
 
+    #moves the player depending on wasd or arrow keys
     def movement(self, key):
         if self.deny == True:
             return
@@ -25,9 +28,12 @@ class Player:
         if key[pygame.K_s] or key[pygame.K_DOWN]:
             self.rect.y += self.spd_mult
     
+    #draws the player's position
     def object(self, obj):
         obj.blit(self.image, self.rect)
 
+
+    #getters and setters
     def get_pos(self):
         print(self.x, self.y, self.spd_mult)
 

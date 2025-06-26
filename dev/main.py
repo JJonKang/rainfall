@@ -1,8 +1,12 @@
+#Rainfall's main file
+
+#importing from controls and buttons
 import pygame
 import buttons as buttons
 import controls as controls
 from sys import exit #true exit program
 
+#initializing and starting up the program
 pygame.init()
 screen = pygame.display.set_mode((800, 500))
 pygame.display.set_caption("something special")
@@ -43,15 +47,19 @@ wall_rects = [top_wall_rect, bot_wall_rect, left_wall_rect, right_wall_rect]
 #
 while True:
     for event in pygame.event.get():
+        #exits the game
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+
+    #sets up the background
     screen.fill('black')
     screen.blit(wall_surf_hor, top_wall_rect)
     screen.blit(wall_surf_hor, bot_wall_rect)
     screen.blit(wall_surf_vert, left_wall_rect)
     screen.blit(wall_surf_vert, right_wall_rect)
 
+    #buttons variables
     play_rect, help_rect = buttons.intro(screen)
 
     #text
@@ -62,10 +70,10 @@ while True:
     player.movement(keys)
     player.object(screen)
 
+    #collision checks
     if player_rect.colliderect(play_rect) and keys[pygame.K_SPACE]:
         text_surf = basic_font.render('click 1', False, "#270061")
         text_rect = text_surf.get_rect(center = (400, 50))
-
     elif player_rect.colliderect(help_rect) and keys[pygame.K_SPACE]:
         text_surf = basic_font.render('help 1', False, "#1b005b")
         text_rect = text_surf.get_rect(center = (400, 50))
@@ -82,4 +90,4 @@ while True:
 
     #don't touch
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(60) #60 fps

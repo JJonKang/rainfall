@@ -1,3 +1,5 @@
+#buttons file
+#has the "play" and "help" buttons so far
 import pygame
 def intro(screen):
     #play the game
