@@ -92,12 +92,12 @@ while True:
 
     #text
     screen.blit(text_surf, text_rect)
-    help_list = ['F or J to BOOST', 'E or K to FOCUS', 'Space to INTERACT']
+    help_list = ['WASD or ARROWS to MOVE', 'F or J to BOOST', 'E or K to FOCUS', 'Space to INTERACT']
     y_offset = 0
     for line in help_list:
         help_surf = smaller_basic_font.render(line, False, 'white')
-        help_rect = help_surf.get_rect(center = (400, 375 + y_offset))
-        y_offset += 20
+        help_rect = help_surf.get_rect(center = (400, 362 + y_offset))
+        y_offset += 25
         screen.blit(help_surf, help_rect)
     
 
@@ -105,6 +105,11 @@ while True:
     keys = pygame.key.get_pressed()
     player.movement(keys, wall_rects) #note the wall_rects for future reference, not sure if it'll need to be removed later
     player.object(screen)
+
+    #more text
+    cd_text_surf = smaller_basic_font.render(str((player.get_cooldown() + 59) // 60), False, 'white')
+    cd_text_rect = cd_text_surf.get_rect(center = (770, 34))
+    screen.blit(cd_text_surf, cd_text_rect)
 
     #collision checks
     if player_rect.colliderect(play_button_rect) and keys[pygame.K_SPACE]:

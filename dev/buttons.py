@@ -9,7 +9,7 @@ def intro(screen):
     screen.blit(play_surf, play_rect)
 
     #help button
-    help_surf = pygame.Surface((226, 100)).convert()
+    help_surf = pygame.Surface((300, 100)).convert()
     help_surf.fill((200, 0, 200))
     help_rect = help_surf.get_rect(center = (400, 400))
     screen.blit(help_surf, help_rect)

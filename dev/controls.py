@@ -99,3 +99,6 @@ class Player:
 
     def get_collide(self):
         return self.collide
+    
+    def get_cooldown(self):
+        return self.dash_cd
