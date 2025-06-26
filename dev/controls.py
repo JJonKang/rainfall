@@ -23,25 +23,33 @@ class Player:
         #keeping the former position
         old_rect = self.rect.copy()
 
-        #"dash"
+        #"dash": doubles speed of player, cooldown
         if (key[pygame.K_f] or key[pygame.K_j]) and self.spd_lock == False and self.dash_cd == 0:
             self.spd_mult = self.spd_mult_default * 2
-            self.dash_cd = 60
+            self.dash_cd = 180
             self.image.fill('blue')
             self.spd_lock = True
         else:
-            if self.dash_cd > 0:
-                self.image.fill('blue')
+            if self.dash_cd > 120:
                 self.dash_cd -= 1
+            elif self.dash_cd > 0:
+                self.spd_mult = self.spd_mult_default
+                self.image.fill("#a48bff")
+                self.dash_cd -= 1
+                self.spd_lock = False
             else:
                 self.spd_mult = self.spd_mult_default
                 self.image.fill(self.clr_default)
                 self.spd_lock = False
         
-        #"focus"
-        if (key[pygame.K_LSHIFT] or key[pygame.K_RSHIFT]) and self.spd_lock == False:
-            self.spd_mult = self.spd_mult_default / 2
-            self.image.fill('orange')
+        #"focus": slows player by half, no cooldown
+        if (key[pygame.K_e] or key[pygame.K_k]) and self.spd_lock == False:
+            if self.dash_cd > 0 and self.dash_cd < 120:
+                self.spd_mult = self.spd_mult_default - 2
+                self.image.fill("#749e00")
+            else:
+                self.spd_mult = self.spd_mult_default - 2
+                self.image.fill("#ff9100")
 
         #left/right movement
         if key[pygame.K_d] or key[pygame.K_RIGHT]:
