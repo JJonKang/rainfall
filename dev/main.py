@@ -3,7 +3,7 @@
 #importing from controls and buttons
 import pygame
 import buttons as buttons
-import controls as controls
+import chars as chars
 from sys import exit #true exit program
 
 #initializing and starting up the program
@@ -21,8 +21,11 @@ text_surf = basic_font.render('default 0', False, 'white')
 text_rect = text_surf.get_rect(center = (400, 50))
 
 #player default
-player = controls.Player()
-player_rect = player.rect
+player = chars.Player()
+player_rect = player.get_rect()
+#enemy default
+enemy = chars.Enemy()
+enemy_rect = enemy.rect
 
 #horiz walls
 wall_surf_hor = pygame.Surface((800, 20)).convert()
@@ -135,6 +138,10 @@ while True:
     #instructions text
     instructions()
 
+    #enemy spawn from pressing the play
+    if(enemy.get_spawn() == True):
+        enemy.object(screen)
+
     #controlling the player
     keys = pygame.key.get_pressed()
     player.movement(keys, wall_rects) #note the wall_rects for future reference, not sure if it'll need to be removed later
@@ -144,21 +151,22 @@ while True:
     cd_visualization()
 
     #collision checks and wall sound
-    if player.bonk_cd != 0:
-        player.bonk_cd -= 1
+    # if player.bonk_cd != 0:
+    #     player.bonk_cd -= 1
 
     if player_rect.colliderect(play_button_rect) and keys[pygame.K_SPACE]:
         text_surf = basic_font.render('click 1', False, "#270061")
         text_rect = text_surf.get_rect(center = (400, 50))
+        enemy.set_spawn(True)
         player.set_req('interact')
     elif player_rect.colliderect(help_button_rect) and keys[pygame.K_SPACE]:
         text_surf = basic_font.render('help 1', False, "#1b005b")
         text_rect = text_surf.get_rect(center = (400, 50))
         player.set_req('interact')
     if player.get_collide() == True:
-        if player.bonk_cd == 0:
-            player.bonk_cd = 60
-            wall_bonk.play()
+        # if player.bonk_cd == 0:
+        #     player.bonk_cd = 60
+        #     wall_bonk.play()
         text_surf = basic_font.render('walled', False, "#741c1c")
         text_rect = text_surf.get_rect(center = (400, 50))
         player.set_collide(False)

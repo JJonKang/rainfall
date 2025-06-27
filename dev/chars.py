@@ -3,7 +3,7 @@
 import pygame
 class Player:
     #for now the multipler for speed is simply 3
-    def __init__(self, x = 300, y = 250,spd_mult = 3):
+    def __init__(self, x = 275, y = 250,spd_mult = 3):
         self.x = x
         self.y = y
         self.spd_mult = spd_mult
@@ -18,7 +18,7 @@ class Player:
 
         self.image = pygame.Surface((18,18))
         self.clr_default = 'white'
-        self.rect = self.image.get_rect(center = (self.y, self.x))
+        self.rect = self.image.get_rect(center = (self.x, self.y))
         self.collide = False
 
     #moves the player depending on wasd or arrow keys
@@ -113,8 +113,39 @@ class Player:
     def get_collide(self):
         return self.collide
     
+    def get_rect(self):
+        return self.rect
+    
     def get_cooldown(self):
         return self.dash_cd
     
     def get_req(self):
         return self.req
+    
+class Enemy:
+    def __init__(self):
+        self.x = 300
+        self.y = 250
+
+        self.image = pygame.Surface((18,18))
+        self.clr_default = "#5100ff"
+        self.rect = self.image.get_rect(center = (self.y, self.x))
+
+        #might replace this collide as for player collision damage in the future
+        self.collide = False
+
+        #spawn indicator
+        self.spawn = False
+
+    def shoot(self):
+        pass
+
+    def object(self, obj):
+        self.image.fill(self.clr_default)
+        obj.blit(self.image, self.rect)
+
+    def set_spawn(self, spawn):
+        self.spawn = spawn
+
+    def get_spawn(self):
+        return self.spawn
