@@ -12,6 +12,8 @@ class Player:
 
         self.req = set()
 
+        self.bonk_cd = 0
+
         self.dash_cd = 0
 
         self.image = pygame.Surface((18,18))

@@ -39,6 +39,8 @@ right_wall_rect = wall_surf_vert.get_rect(center = (790, 250))
 #use this for collision checks for walls
 wall_rects = [top_wall_rect, bot_wall_rect, left_wall_rect, right_wall_rect]
 
+wall_bonk = pygame.mixer.Sound('audio/bonk.wav')
+
 #================================================================================
 #
 #
@@ -141,7 +143,10 @@ while True:
     #boost cooldown visual
     cd_visualization()
 
-    #collision checks
+    #collision checks and wall sound
+    if player.bonk_cd != 0:
+        player.bonk_cd -= 1
+
     if player_rect.colliderect(play_button_rect) and keys[pygame.K_SPACE]:
         text_surf = basic_font.render('click 1', False, "#270061")
         text_rect = text_surf.get_rect(center = (400, 50))
@@ -151,6 +156,9 @@ while True:
         text_rect = text_surf.get_rect(center = (400, 50))
         player.set_req('interact')
     if player.get_collide() == True:
+        if player.bonk_cd == 0:
+            player.bonk_cd = 60
+            wall_bonk.play()
         text_surf = basic_font.render('walled', False, "#741c1c")
         text_rect = text_surf.get_rect(center = (400, 50))
         player.set_collide(False)
