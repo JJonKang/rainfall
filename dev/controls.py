@@ -10,6 +10,8 @@ class Player:
         self.spd_mult_default = spd_mult
         self.spd_lock = False
 
+        self.req = set()
+
         self.dash_cd = 0
 
         self.image = pygame.Surface((18,18))
@@ -25,6 +27,7 @@ class Player:
 
         #"dash": doubles speed of player, cooldown
         if (key[pygame.K_f] or key[pygame.K_j]) and self.spd_lock == False and self.dash_cd == 0:
+            self.req.add('dash')
             self.spd_mult = self.spd_mult_default * 2
             self.dash_cd = 180
             self.image.fill('blue')
@@ -44,6 +47,7 @@ class Player:
         
         #"focus": slows player by half, no cooldown
         if (key[pygame.K_e] or key[pygame.K_k]) and self.spd_lock == False:
+            self.req.add('focus')
             if self.dash_cd > 0 and self.dash_cd < 120:
                 self.spd_mult = self.spd_mult_default - 2
                 self.image.fill("#749e00")
@@ -53,8 +57,10 @@ class Player:
 
         #left/right movement
         if key[pygame.K_d] or key[pygame.K_RIGHT]:
+            self.req.add('move')
             self.rect.x += self.spd_mult
         if key[pygame.K_a] or key[pygame.K_LEFT]:
+            self.req.add('move')
             self.rect.x -= self.spd_mult
 
         #left/right collision check
@@ -66,8 +72,10 @@ class Player:
 
         #up/down movement
         if key[pygame.K_w] or key[pygame.K_UP]:
+            self.req.add('move')
             self.rect.y -= self.spd_mult
         if key[pygame.K_s] or key[pygame.K_DOWN]:
+            self.req.add('move')
             self.rect.y += self.spd_mult
 
         #up/down collision check
@@ -97,8 +105,14 @@ class Player:
     def set_collide(self, collide):
         self.collide = collide
 
+    def set_req(self, req):
+        self.req.add(req)
+
     def get_collide(self):
         return self.collide
     
     def get_cooldown(self):
         return self.dash_cd
+    
+    def get_req(self):
+        return self.req

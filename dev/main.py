@@ -89,10 +89,20 @@ def instructions():
     help_list = ['WASD or ARROWS to MOVE', 'F or J to BOOST', 'E or K to FOCUS', 'Space to INTERACT']
     y_offset = 0
     for line in help_list:
-        help_surf = smaller_basic_font.render(line, False, 'white')
+        line_color = 'white'
+        if line == 'Space to INTERACT' and 'interact' in player.get_req():
+            line_color = 'green'
+        if line == 'WASD or ARROWS to MOVE' and 'move' in player.get_req():
+            line_color = 'green'
+        if line == 'F or J to BOOST' and 'dash' in player.get_req():
+            line_color = 'green'
+        if line == 'E or K to FOCUS' and 'focus' in player.get_req():
+            line_color = 'green'
+        help_surf = smaller_basic_font.render(line, False, line_color)
         help_rect = help_surf.get_rect(center = (400, 362 + y_offset))
         y_offset += 25
         screen.blit(help_surf, help_rect)
+
 #cooldown visualization text
 def cd_visualization():
     cd_text_surf = smaller_basic_font.render(str((player.get_cooldown() + 59) // 60), False, 'white')
@@ -137,9 +147,11 @@ while True:
     if player_rect.colliderect(play_button_rect) and keys[pygame.K_SPACE]:
         text_surf = basic_font.render('click 1', False, "#270061")
         text_rect = text_surf.get_rect(center = (400, 50))
+        player.set_req('interact')
     elif player_rect.colliderect(help_button_rect) and keys[pygame.K_SPACE]:
         text_surf = basic_font.render('help 1', False, "#1b005b")
         text_rect = text_surf.get_rect(center = (400, 50))
+        player.set_req('interact')
     if player.get_collide() == True:
         text_surf = basic_font.render('walled', False, "#741c1c")
         text_rect = text_surf.get_rect(center = (400, 50))
