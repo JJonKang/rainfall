@@ -86,19 +86,17 @@ def nothing():
 #mainly for instructions on how to play
 def instructions():
     screen.blit(text_surf, text_rect)
-    help_list = ['WASD or ARROWS to MOVE', 'F or J to BOOST', 'E or K to FOCUS', 'Space to INTERACT']
+    help_items = {'WASD or ARROWS to MOVE':'move',
+                  'F or J to BOOST':'dash',
+                  'E or K to FOCUS':'focus',
+                  'Space to INTERACT':'interact'}
     y_offset = 0
-    for line in help_list:
-        line_color = 'white'
-        if line == 'Space to INTERACT' and 'interact' in player.get_req():
-            line_color = 'green'
-        if line == 'WASD or ARROWS to MOVE' and 'move' in player.get_req():
-            line_color = 'green'
-        if line == 'F or J to BOOST' and 'dash' in player.get_req():
-            line_color = 'green'
-        if line == 'E or K to FOCUS' and 'focus' in player.get_req():
-            line_color = 'green'
-        help_surf = smaller_basic_font.render(line, False, line_color)
+    for text, req in help_items.items():
+        if req in player.get_req():
+            line_color = "#73C655"
+        else:
+            line_color = 'white'
+        help_surf = smaller_basic_font.render(text, False, line_color)
         help_rect = help_surf.get_rect(center = (400, 362 + y_offset))
         y_offset += 25
         screen.blit(help_surf, help_rect)
