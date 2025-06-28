@@ -124,12 +124,12 @@ class Player:
     
 class Enemy:
     def __init__(self):
-        self.x = 300
+        self.x = 750
         self.y = 250
 
         self.image = pygame.Surface((18,18))
         self.clr_default = "#5100ff"
-        self.rect = self.image.get_rect(center = (self.y, self.x))
+        self.rect = self.image.get_rect(center = (self.x, self.y))
 
         #might replace this collide as for player collision damage in the future
         self.collide = False

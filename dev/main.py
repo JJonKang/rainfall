@@ -88,6 +88,12 @@ def nothing():
 #                            
 #
 
+#play text
+def play_text():
+    play_text_surf = smaller_basic_font.render('PLAY', False, 'white')
+    play_text_rect = play_text_surf.get_rect(center = (400, 200))
+    screen.blit(play_text_surf, play_text_rect)
+
 #mainly for instructions on how to play
 def instructions():
     screen.blit(text_surf, text_rect)
@@ -136,6 +142,7 @@ while True:
     play_button_rect, help_button_rect = buttons.intro(screen)    
 
     #instructions text
+    play_text()
     instructions()
 
     #enemy spawn from pressing the play
