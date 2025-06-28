@@ -153,7 +153,7 @@ class Enemy:
             angle = a * direction + self.alteration
             bullet = projectiles.Bullet(self.x, self.y, 8, angle)
             self.bullets.append(bullet)
-        self.bullet_timer = 15
+        self.bullet_timer = 5
         self.alteration += 5
 
     def bullet_update(self, screen):

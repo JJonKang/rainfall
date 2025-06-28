@@ -145,7 +145,7 @@ while True:
     play_text()
     instructions()
 
-    #enemy spawn from pressing the play
+    #enemy spawn and projectile checks/spawn
     if(enemy.get_spawn() == True):
         enemy.object(screen)
         if enemy.get_bullet_timer() > 0:
