@@ -148,6 +148,11 @@ while True:
     #enemy spawn from pressing the play
     if(enemy.get_spawn() == True):
         enemy.object(screen)
+        if enemy.get_bullet_timer() > 0:
+            enemy.bullet_update(screen)
+            enemy.set_bullet_timer_reduction(1)
+        else:
+            enemy.shoot(18)
 
     #controlling the player
     keys = pygame.key.get_pressed()

@@ -1,6 +1,7 @@
-#controls file
-#currently only contains the player
+#characters
 import pygame
+import math
+import projectiles as projectiles
 class Player:
     #for now the multipler for speed is simply 3
     def __init__(self, x = 275, y = 250,spd_mult = 3):
@@ -137,8 +138,28 @@ class Enemy:
         #spawn indicator
         self.spawn = False
 
-    def shoot(self):
-        pass
+        #bullet memory list
+        self.bullets = []
+
+        #bullet cooldown
+        self.bullet_timer = 0
+
+        #angle alteration
+        self.alteration = 0
+
+    def shoot(self, count = 26):
+        direction = (2 * math.pi) / count
+        for a in range(count):
+            angle = a * direction + self.alteration
+            bullet = projectiles.Bullet(self.x, self.y, 8, angle)
+            self.bullets.append(bullet)
+        self.bullet_timer = 15
+        self.alteration += 5
+
+    def bullet_update(self, screen):
+        for bullet in self.bullets:
+            bullet.update()
+            bullet.object(screen)
 
     def object(self, obj):
         self.image.fill(self.clr_default)
@@ -147,5 +168,14 @@ class Enemy:
     def set_spawn(self, spawn):
         self.spawn = spawn
 
+    def set_bullet_timer_reduction(self, time):
+        self.bullet_timer -= time
+
     def get_spawn(self):
         return self.spawn
+    
+    def get_bullets_list(self):
+        return self.bullets
+    
+    def get_bullet_timer(self):
+        return self.bullet_timer
