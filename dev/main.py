@@ -167,7 +167,7 @@ while True:
     #     player.bonk_cd -= 1
 
     if player_rect.colliderect(play_button_rect) and keys[pygame.K_SPACE]:
-        text_surf = basic_font.render('click 1', False, "#270061")
+        text_surf = basic_font.render('LOCKED', False, "#270061")
         text_rect = text_surf.get_rect(center = (400, 50))
         enemy.set_spawn(True)
         player.set_req('interact')

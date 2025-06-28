@@ -20,3 +20,6 @@ class Bullet:
     def object(self, obj):
         self.image.fill(self.clr_default)
         obj.blit(self.image, self.rect)
+
+    def get_pos(self):
+        return self.x, self.y

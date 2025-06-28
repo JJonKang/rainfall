@@ -4,7 +4,7 @@ import math
 import projectiles as projectiles
 class Player:
     #for now the multipler for speed is simply 3
-    def __init__(self, x = 275, y = 250,spd_mult = 3):
+    def __init__(self, x = 275, y = 250,spd_mult = 4):
         self.x = x
         self.y = y
         self.spd_mult = spd_mult
@@ -157,9 +157,16 @@ class Enemy:
         self.alteration += 5
 
     def bullet_update(self, screen):
+        width, height = screen.get_size()
+        print(width, height)
+        updated_bullets = []
         for bullet in self.bullets:
-            bullet.update()
-            bullet.object(screen)
+            x, y = bullet.get_pos()
+            if x >= 25 and x < width - 25 and y >= 25 and y < height - 25:
+                bullet.update()
+                bullet.object(screen)
+                updated_bullets.append(bullet)
+        self.bullets = updated_bullets
 
     def object(self, obj):
         self.image.fill(self.clr_default)
