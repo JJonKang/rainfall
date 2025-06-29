@@ -47,34 +47,6 @@ wall_bonk = pygame.mixer.Sound('audio/bonk.wav')
 #================================================================================
 #
 #
-#                                DEFUNCT
-#                            Wall Collision
-#
-#
-def wall_collision():
-    for wall in wall_rects:
-        if player_rect.colliderect(wall):
-            #top wall and bottom wall collision checks
-            if wall == top_wall_rect or wall == bot_wall_rect:
-                if player_rect.centery < wall.centery:
-                    player.set_y(wall.top - player_rect.height)
-                else:
-                    player.set_y(wall.bottom)
-                text_surf = basic_font.render('walled', False, "#741c1c")
-                text_rect = text_surf.get_rect(center = (400, 50))
-
-            #left wall and right wall collision checks
-            if wall == left_wall_rect or wall == right_wall_rect:
-                if player_rect.centerx < wall.centerx:
-                    player.set_x(wall.left - player_rect.width)
-                else:
-                    player.set_x(wall.right)
-                text_surf = basic_font.render('walled', False, "#741c1c")
-                text_rect = text_surf.get_rect(center = (400, 50))
-
-#================================================================================
-#
-#
 #                           SETTING UP/FOUNDATIONS
 #                            
 #
@@ -102,8 +74,10 @@ def instructions():
                   'E or K to FOCUS':'focus',
                   'Space to INTERACT':'interact'}
     y_offset = 0
+    instruction_clear = 0
     for text, req in help_items.items():
         if req in player.get_req():
+            instruction_clear += 1
             line_color = "#73C655"
         else:
             line_color = 'white'
@@ -111,6 +85,7 @@ def instructions():
         help_rect = help_surf.get_rect(center = (400, 362 + y_offset))
         y_offset += 25
         screen.blit(help_surf, help_rect)
+    return instruction_clear == 4
 
 #cooldown visualization text
 def cd_visualization():
@@ -143,7 +118,7 @@ while True:
 
     #instructions text
     play_text()
-    instructions()
+    proceed = instructions()
 
     #enemy spawn and projectile checks/spawn
     if(enemy.get_spawn() == True):
@@ -167,10 +142,14 @@ while True:
     #     player.bonk_cd -= 1
 
     if player_rect.colliderect(play_button_rect) and keys[pygame.K_SPACE]:
-        text_surf = basic_font.render('LOCKED', False, "#270061")
+        if proceed == True:
+            text_surf = basic_font.render('GET READY', False, "#270061")
+            player.set_req('interact')
+            enemy.set_spawn(True)
+        else:
+            text_surf = basic_font.render('FINISH INSTRUCTIONS', False, "#270061")
+            player.set_req('interact')
         text_rect = text_surf.get_rect(center = (400, 50))
-        enemy.set_spawn(True)
-        player.set_req('interact')
     elif player_rect.colliderect(help_button_rect) and keys[pygame.K_SPACE]:
         text_surf = basic_font.render('help 1', False, "#1b005b")
         text_rect = text_surf.get_rect(center = (400, 50))

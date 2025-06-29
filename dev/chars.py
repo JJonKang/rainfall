@@ -158,7 +158,6 @@ class Enemy:
 
     def bullet_update(self, screen):
         width, height = screen.get_size()
-        print(width, height)
         updated_bullets = []
         for bullet in self.bullets:
             x, y = bullet.get_pos()
