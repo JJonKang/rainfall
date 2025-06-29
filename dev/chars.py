@@ -21,6 +21,7 @@ class Player:
         self.clr_default = 'white'
         self.rect = self.image.get_rect(center = (self.x, self.y))
         self.collide = False
+        self.health = 3
 
     #moves the player depending on wasd or arrow keys
     def movement(self, key, collision):
@@ -111,6 +112,9 @@ class Player:
     def set_req(self, req):
         self.req.add(req)
 
+    def set_health_reduce(self, reduce):
+        self.health -= reduce
+
     def get_collide(self):
         return self.collide
     
@@ -122,6 +126,9 @@ class Player:
     
     def get_req(self):
         return self.req
+    
+    def get_health(self):
+        return self.health
     
 class Enemy:
     def __init__(self):
@@ -156,16 +163,22 @@ class Enemy:
         self.bullet_timer = 5
         self.alteration += 5
 
-    def bullet_update(self, screen):
+    def bullet_update(self, screen, player):
         width, height = screen.get_size()
         updated_bullets = []
         for bullet in self.bullets:
+            if player.get_health() == 0:
+                return False
             x, y = bullet.get_pos()
             if x >= 25 and x < width - 25 and y >= 25 and y < height - 25:
                 bullet.update()
                 bullet.object(screen)
+                if bullet.rect.colliderect(player.get_rect()):
+                    player.set_health_reduce(1)
+                    continue
                 updated_bullets.append(bullet)
         self.bullets = updated_bullets
+        return True
 
     def object(self, obj):
         self.image.fill(self.clr_default)

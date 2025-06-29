@@ -93,6 +93,11 @@ def cd_visualization():
     cd_text_rect = cd_text_surf.get_rect(center = (770, 34))
     screen.blit(cd_text_surf, cd_text_rect)
 
+def health_visualization():
+    health_text_surf = smaller_basic_font.render(str(player.get_health()), False, 'white')
+    health_text_rect = health_text_surf.get_rect(center = (30, 34))
+    screen.blit(health_text_surf, health_text_rect)
+
 #================================================================================
 #
 #
@@ -124,18 +129,19 @@ while True:
     if(enemy.get_spawn() == True):
         enemy.object(screen)
         if enemy.get_bullet_timer() > 0:
-            enemy.bullet_update(screen)
+            enemy.bullet_update(screen, player)
             enemy.set_bullet_timer_reduction(1)
         else:
-            enemy.shoot(18)
+            enemy.shoot(18)        
 
     #controlling the player
     keys = pygame.key.get_pressed()
     player.movement(keys, wall_rects) #note the wall_rects for future reference, not sure if it'll need to be removed later
     player.object(screen)
 
-    #boost cooldown visual
+    #boost cooldown visual and health visual
     cd_visualization()
+    health_visualization()
 
     #collision checks and wall sound
     # if player.bonk_cd != 0:
@@ -161,6 +167,12 @@ while True:
         text_surf = basic_font.render('walled', False, "#741c1c")
         text_rect = text_surf.get_rect(center = (400, 50))
         player.set_collide(False)
+
+    if player.get_health() == 0:
+        screen.fill('black')
+        text_surf = basic_font.render('YOUR HP HAS REDUCED TO 0', False, "#381100")
+        text_rect = text_surf.get_rect(center = (400, 50))
+        screen.blit(text_surf, text_rect)
 
     #don't touch
     pygame.display.update()
