@@ -149,7 +149,7 @@ while True:
 
     if player_rect.colliderect(play_button_rect) and keys[pygame.K_SPACE]:
         if proceed == True:
-            text_surf = basic_font.render('GET READY', False, "#270061")
+            text_surf = basic_font.render('START', False, "#270061")
             player.set_req('interact')
             enemy.set_spawn(True)
         else:
