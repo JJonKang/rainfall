@@ -16,6 +16,7 @@ class Player:
         self.bonk_cd = 0
 
         self.dash_cd = 0
+        self.invuln = False
 
         self.image = pygame.Surface((18,18))
         self.clr_default = 'white'
@@ -36,6 +37,7 @@ class Player:
             self.dash_cd = 180
             self.image.fill('blue')
             self.spd_lock = True
+            self.invuln = True
         else:
             if self.dash_cd > 120:
                 self.dash_cd -= 1
@@ -44,6 +46,7 @@ class Player:
                 self.image.fill("#a48bff")
                 self.dash_cd -= 1
                 self.spd_lock = False
+                self.invuln = False
             else:
                 self.spd_mult = self.spd_mult_default
                 self.image.fill(self.clr_default)
@@ -130,6 +133,9 @@ class Player:
     def get_health(self):
         return self.health
     
+    def get_invuln(self):
+        return self.invuln
+    
 class Enemy:
     def __init__(self):
         self.x = 750
@@ -173,7 +179,7 @@ class Enemy:
             if x >= 25 and x < width - 25 and y >= 25 and y < height - 25:
                 bullet.update()
                 bullet.object(screen)
-                if bullet.rect.colliderect(player.get_rect()):
+                if bullet.rect.colliderect(player.get_rect()) and player.get_invuln() == False:
                     player.set_health_reduce(1)
                     continue
                 updated_bullets.append(bullet)
