@@ -66,6 +66,8 @@ class Game():
                     'Space to INTERACT':'interact'}
         y_offset = 0
         instruction_clear = 0
+
+        #check out if each instruction has been completed
         for text, req in help_items.items():
             if req in self.player.get_req():
                 instruction_clear += 1
@@ -76,7 +78,7 @@ class Game():
             help_rect = help_surf.get_rect(center = (400, 362 + y_offset))
             y_offset += 25
             self.screen.blit(help_surf, help_rect)
-        return instruction_clear == 4
+        return instruction_clear == 4 #true if all instructions are complete
 
     #cooldown visualization text
     def cd_visualization(self):
@@ -84,10 +86,49 @@ class Game():
         cd_text_rect = cd_text_surf.get_rect(center = (770, 34))
         self.screen.blit(cd_text_surf, cd_text_rect)
 
+    #health visualization text
     def health_visualization(self):
         health_text_surf = self.smaller_basic_font.render(str(self.player.get_health()), False, 'white')
         health_text_rect = health_text_surf.get_rect(center = (30, 34))
         self.screen.blit(health_text_surf, health_text_rect)
+
+    #checks all the collisions that occur
+    def collisions(self):
+        player_rect = self.player.get_rect()
+
+        #collision check: start button
+        if player_rect.colliderect(self.play_button_rect) and self.keys[pygame.K_SPACE]:
+            if self.proceed == True: 
+                self.text_surf = self.basic_font.render('START', False, "#270061")
+                self.player.set_req('interact')
+                self.enemy.set_spawn(True)
+            else:
+                #locked out of starting game
+                self.text_surf = self.basic_font.render('FINISH INSTRUCTIONS', False, "#270061")
+                self.player.set_req('interact')
+            self.text_rect = self.text_surf.get_rect(center = (400, 50))
+
+        #collision check: help button, somewhat vanity, does not do much
+        elif player_rect.colliderect(self.help_button_rect) and self.keys[pygame.K_SPACE]:
+            self.text_surf = self.basic_font.render('help 1', False, "#1b005b")
+            self.text_rect = self.text_surf.get_rect(center = (400, 50))
+            self.player.set_req('interact')
+
+        #collision check: wall
+        if self.player.get_collide() == True:
+            # if player.bonk_cd == 0:
+            #     player.bonk_cd = 60
+            #     wall_bonk.play()
+            self.text_surf = self.basic_font.render('walled', False, "#741c1c")
+            self.text_rect = self.text_surf.get_rect(center = (400, 50))
+            self.player.set_collide(False)
+
+        #collision check: if health reaches 0
+        if self.player.get_health() == 0:
+            self.screen.fill('black')
+            self.text_surf = self.basic_font.render('YOUR HP HAS REDUCED TO 0', False, "#381100")
+            self.text_rect = self.text_surf.get_rect(center = (400, 50))
+            self.screen.blit(self.text_surf, self.text_rect)
 
     def run(self):
         while True:
@@ -105,11 +146,11 @@ class Game():
             self.screen.blit(self.wall_surf_vert, self.right_wall_rect)
 
             #buttons variables
-            play_button_rect, help_button_rect = buttons.intro(self.screen)    
+            self.play_button_rect, self.help_button_rect = buttons.intro(self.screen)    
 
             #instructions text
             self.play_text()
-            proceed = self.instructions()
+            self.proceed = self.instructions()
 
             #enemy spawn and projectile checks/spawn
             if(self.enemy.get_spawn() == True):
@@ -121,8 +162,8 @@ class Game():
                     self.enemy.shoot(18)        
 
             #controlling the player
-            keys = pygame.key.get_pressed()
-            self.player.movement(keys, self.wall_rects) #note the wall_rects for future reference, not sure if it'll need to be removed later
+            self.keys = pygame.key.get_pressed()
+            self.player.movement(self.keys, self.wall_rects) #note the wall_rects for future reference, not sure if it'll need to be removed later
             self.player.object(self.screen)
 
             #boost cooldown visual and health visual
@@ -132,38 +173,14 @@ class Game():
             #collision checks and wall sound
             # if player.bonk_cd != 0:
             #     player.bonk_cd -= 1
-            player_rect = self.player.get_rect()
-            if player_rect.colliderect(play_button_rect) and keys[pygame.K_SPACE]:
-                if proceed == True:
-                    self.text_surf = self.basic_font.render('START', False, "#270061")
-                    self.player.set_req('interact')
-                    self.enemy.set_spawn(True)
-                else:
-                    self.text_surf = self.basic_font.render('FINISH INSTRUCTIONS', False, "#270061")
-                    self.player.set_req('interact')
-                self.text_rect = self.text_surf.get_rect(center = (400, 50))
-            elif player_rect.colliderect(help_button_rect) and keys[pygame.K_SPACE]:
-                self.text_surf = self.basic_font.render('help 1', False, "#1b005b")
-                self.text_rect = self.text_surf.get_rect(center = (400, 50))
-                self.player.set_req('interact')
-            if self.player.get_collide() == True:
-                # if player.bonk_cd == 0:
-                #     player.bonk_cd = 60
-                #     wall_bonk.play()
-                self.text_surf = self.basic_font.render('walled', False, "#741c1c")
-                self.text_rect = self.text_surf.get_rect(center = (400, 50))
-                self.player.set_collide(False)
-
-            if self.player.get_health() == 0:
-                self.screen.fill('black')
-                self.text_surf = self.basic_font.render('YOUR HP HAS REDUCED TO 0', False, "#381100")
-                self.text_rect = self.text_surf.get_rect(center = (400, 50))
-                self.screen.blit(self.text_surf, self.text_rect)
+            self.collisions()
 
             #don't touch
             pygame.display.update()
             self.clock.tick(60) #60 fps
 
+
+#starting main point
 if __name__ == '__main__':
     game = Game()
     game.run()
