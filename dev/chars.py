@@ -97,12 +97,6 @@ class Player:
         obj.blit(self.image, self.rect)
 
     #getters and setters
-    def get_pos(self):
-        print(self.x, self.y, self.spd_mult)
-
-    def set_x(self, x):
-        self.x = x
-    
     def set_y(self, y):
         self.y = y
 
